@@ -3,9 +3,11 @@ module github.com/0xThomas3000/be-go-codebase
 go 1.19
 
 require (
+	github.com/aws/aws-sdk-go v1.44.113
 	github.com/badoux/checkmail v1.2.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-jwt/jwt/v4 v4.4.2
+	github.com/joho/godotenv v1.4.0
 	github.com/matcornic/hermes/v2 v2.1.0
 	github.com/sendgrid/sendgrid-go v3.12.0+incompatible
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b
@@ -39,6 +41,7 @@ require (
 	github.com/jackc/pgtype v1.12.0 // indirect
 	github.com/jackc/pgx/v4 v4.17.2 // indirect
 	github.com/jaytaylor/html2text v0.0.0-20211105163654-bc68cce691ba // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
