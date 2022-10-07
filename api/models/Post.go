@@ -41,17 +41,17 @@ func (p *Post) Validate() map[string]string {
 	var errorMessages = make(map[string]string)
 
 	if p.Title == "" {
-		err = errors.New("Required Title")
+		err = errors.New("required title")
 		errorMessages["Required_title"] = err.Error()
 
 	}
 	if p.Content == "" {
-		err = errors.New("Required Content")
+		err = errors.New("required content")
 		errorMessages["Required_content"] = err.Error()
 
 	}
 	if p.AuthorID < 1 {
-		err = errors.New("Required Author")
+		err = errors.New("required author")
 		errorMessages["Required_author"] = err.Error()
 	}
 	return errorMessages
@@ -80,7 +80,7 @@ func (p *Post) FindAllPosts(db *gorm.DB) (*[]Post, error) {
 		return &[]Post{}, err
 	}
 	if len(posts) > 0 {
-		for i, _ := range posts {
+		for i := range posts {
 			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].AuthorID).Take(&posts[i].Author).Error
 			if err != nil {
 				return &[]Post{}, err
@@ -140,7 +140,7 @@ func (p *Post) FindUserPosts(db *gorm.DB, uid uint32) (*[]Post, error) {
 		return &[]Post{}, err
 	}
 	if len(posts) > 0 {
-		for i, _ := range posts {
+		for i := range posts {
 			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].AuthorID).Take(&posts[i].Author).Error
 			if err != nil {
 				return &[]Post{}, err

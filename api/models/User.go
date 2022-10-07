@@ -32,7 +32,7 @@ type User struct {
 	UpdatedAt  time.Time `gorm:"datetime(3)" json:"updated_at"`
 }
 
-func (u *User) BeforeSave() error {
+func (u *User) BeforeSave(db *gorm.DB) error {
 	hashedPassword, err := security.Hash(u.Password)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (u *User) Prepare() {
 	u.UpdatedAt = time.Now()
 }
 
-func (u *User) AfterFind() (err error) {
+func (u *User) AfterFind(db *gorm.DB) (err error) {
 	if err != nil {
 		return err
 	}
@@ -67,63 +67,63 @@ func (u *User) Validate(action string) map[string]string {
 	switch strings.ToLower(action) {
 	case "update":
 		if u.Email == "" {
-			err = errors.New("Required Email")
+			err = errors.New("required email")
 			errorMessages["Required_email"] = err.Error()
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("Invalid Email")
+				err = errors.New("invalid email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
 
 	case "login":
 		if u.Password == "" {
-			err = errors.New("Required Password")
+			err = errors.New("required password")
 			errorMessages["Required_password"] = err.Error()
 		}
 		if u.Email == "" {
-			err = errors.New("Required Email")
+			err = errors.New("required email")
 			errorMessages["Required_email"] = err.Error()
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("Invalid Email")
+				err = errors.New("invalid email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
 	case "forgotpassword":
 		if u.Email == "" {
-			err = errors.New("Required Email")
+			err = errors.New("required email")
 			errorMessages["Required_email"] = err.Error()
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("Invalid Email")
+				err = errors.New("invalid email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
 	default:
 		if u.Username == "" {
-			err = errors.New("Required Username")
+			err = errors.New("required username")
 			errorMessages["Required_username"] = err.Error()
 		}
 		if u.Password == "" {
-			err = errors.New("Required Password")
+			err = errors.New("required password")
 			errorMessages["Required_password"] = err.Error()
 		}
 		if u.Password != "" && len(u.Password) < 6 {
-			err = errors.New("Password should be atleast 6 characters")
+			err = errors.New("password should be at least 6 characters")
 			errorMessages["Invalid_password"] = err.Error()
 		}
 		if u.Email == "" {
-			err = errors.New("Required Email")
+			err = errors.New("required email")
 			errorMessages["Required_email"] = err.Error()
 
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("Invalid Email")
+				err = errors.New("invalid email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
@@ -134,8 +134,7 @@ func (u *User) Validate(action string) map[string]string {
 func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 
 	var err error
-	err = db.Debug().Create(&u).Error
-	if err != nil {
+	if err = db.Debug().Create(&u).Error; err != nil {
 		return &User{}, err
 	}
 	return u, nil
@@ -154,8 +153,7 @@ func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 	var err error
-	err = db.Debug().Model(User{}).Where("id = ?", uid).Take(&u).Error
-	if err != nil {
+	if err = db.Debug().Model(User{}).Where("id = ?", uid).Take(&u).Error; err != nil {
 		return &User{}, err
 	}
 	if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -168,7 +166,7 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 
 	if u.Password != "" {
 		// To hash the password
-		err := u.BeforeSave()
+		err := u.BeforeSave(db)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -231,7 +229,7 @@ func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 func (u *User) UpdatePassword(db *gorm.DB) error {
 
 	// To hash the password
-	err := u.BeforeSave()
+	err := u.BeforeSave(db)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -43,12 +43,12 @@ func (c *Comment) Validate(action string) map[string]string {
 	switch strings.ToLower(action) {
 	case "update":
 		if c.Body == "" {
-			err = errors.New("Required Comment")
+			err = errors.New("required comment")
 			errorMessages["Required_body"] = err.Error()
 		}
 	default:
 		if c.Body == "" {
-			err = errors.New("Required Comment")
+			err = errors.New("required comment")
 			errorMessages["Required_body"] = err.Error()
 		}
 	}
@@ -77,7 +77,7 @@ func (c *Comment) GetComments(db *gorm.DB, pid uint64) (*[]Comment, error) {
 		return &[]Comment{}, err
 	}
 	if len(comments) > 0 {
-		for i, _ := range comments {
+		for i := range comments {
 			err := db.Debug().Model(&User{}).Where("id = ?", comments[i].UserID).Take(&comments[i].User).Error
 			if err != nil {
 				return &[]Comment{}, err

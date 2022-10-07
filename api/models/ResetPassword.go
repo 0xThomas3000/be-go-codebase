@@ -25,8 +25,7 @@ func (resetPassword *ResetPassword) Prepare() {
 
 func (resetPassword *ResetPassword) SaveDatails(db *gorm.DB) (*ResetPassword, error) {
 	var err error
-	err = db.Debug().Create(&resetPassword).Error
-	if err != nil {
+	if err = db.Debug().Create(&resetPassword).Error; err != nil {
 		return &ResetPassword{}, err
 	}
 	return resetPassword, nil
