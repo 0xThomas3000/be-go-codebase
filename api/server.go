@@ -9,6 +9,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
+/*
+In this server.go file, we open a connection to the database.
+Provide a port the app listens to from the .env file.
+*/
 var server = controllers.Server{}
 
 func init() {
