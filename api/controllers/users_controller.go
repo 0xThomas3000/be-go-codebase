@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -35,7 +35,7 @@ func (server *Server) CreateUser(c *gin.Context) {
 	//clear previous error if any
 	errList = map[string]string{}
 
-	body, err := ioutil.ReadAll(c.Request.Body)
+	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		errList["Invalid_body"] = "Unable to get request"
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
@@ -350,7 +350,7 @@ func (server *Server) UpdateUser(c *gin.Context) {
 		return
 	}
 	// Start processing the request
-	body, err := ioutil.ReadAll(c.Request.Body)
+	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		errList["Invalid_body"] = "Unable to get request"
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
