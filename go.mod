@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/badoux/checkmail v1.2.1
+	github.com/golang-jwt/jwt/v4 v4.4.2
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b
 	gorm.io/gorm v1.23.10
 )
