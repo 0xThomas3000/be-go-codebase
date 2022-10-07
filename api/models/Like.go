@@ -16,11 +16,11 @@ import (
 		ii. Deleted
 */
 type Like struct {
-	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
+	ID        uint64    `gorm:"primaryKey;autoIncrement" json:"id"`
 	UserID    uint32    `gorm:"not null" json:"user_id"`
 	PostID    uint64    `gorm:"not null" json:"post_id"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	CreatedAt time.Time `gorm:"datetime(3)" json:"created_at"`
+	UpdatedAt time.Time `gorm:"datetime(3)" json:"updated_at"`
 }
 
 func (l *Like) SaveLike(db *gorm.DB) (*Like, error) {
