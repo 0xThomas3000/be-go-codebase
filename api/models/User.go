@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	// "github.com/0xThomas3000/be-go-codebase/api/security"
+	"github.com/0xThomas3000/be-go-codebase/api/security"
 	"github.com/badoux/checkmail"
 
 	"gorm.io/gorm"
@@ -23,13 +23,13 @@ A user can:
 	iv. Shutdown his account
 */
 type User struct {
-	ID         uint32    `gorm:"primary_key;auto_increment" json:"id"`
+	ID         uint32    `gorm:"primaryKey;autoIncrement" json:"id"`
 	Username   string    `gorm:"size:255;not null;unique" json:"username"`
 	Email      string    `gorm:"size:100;not null;unique" json:"email"`
 	Password   string    `gorm:"size:100;not null;" json:"password"`
 	AvatarPath string    `gorm:"size:255;null;" json:"avatar_path"`
-	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	CreatedAt  time.Time `gorm:"datetime(3)" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"datetime(3)" json:"updated_at"`
 }
 
 func (u *User) BeforeSave() error {
@@ -67,63 +67,63 @@ func (u *User) Validate(action string) map[string]string {
 	switch strings.ToLower(action) {
 	case "update":
 		if u.Email == "" {
-			err = errors.New("required email")
+			err = errors.New("Required Email")
 			errorMessages["Required_email"] = err.Error()
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("invalid email")
+				err = errors.New("Invalid Email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
 
 	case "login":
 		if u.Password == "" {
-			err = errors.New("required password")
+			err = errors.New("Required Password")
 			errorMessages["Required_password"] = err.Error()
 		}
 		if u.Email == "" {
-			err = errors.New("required email")
+			err = errors.New("Required Email")
 			errorMessages["Required_email"] = err.Error()
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("invalid email")
+				err = errors.New("Invalid Email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
 	case "forgotpassword":
 		if u.Email == "" {
-			err = errors.New("required email")
+			err = errors.New("Required Email")
 			errorMessages["Required_email"] = err.Error()
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("invalid email")
+				err = errors.New("Invalid Email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
 	default:
 		if u.Username == "" {
-			err = errors.New("required username")
+			err = errors.New("Required Username")
 			errorMessages["Required_username"] = err.Error()
 		}
 		if u.Password == "" {
-			err = errors.New("required password")
+			err = errors.New("Required Password")
 			errorMessages["Required_password"] = err.Error()
 		}
 		if u.Password != "" && len(u.Password) < 6 {
-			err = errors.New("password should be at least 6 characters")
+			err = errors.New("Password should be atleast 6 characters")
 			errorMessages["Invalid_password"] = err.Error()
 		}
 		if u.Email == "" {
-			err = errors.New("required email")
+			err = errors.New("Required Email")
 			errorMessages["Required_email"] = err.Error()
 
 		}
 		if u.Email != "" {
 			if err = checkmail.ValidateFormat(u.Email); err != nil {
-				err = errors.New("invalid email")
+				err = errors.New("Invalid Email")
 				errorMessages["Invalid_email"] = err.Error()
 			}
 		}
@@ -159,7 +159,7 @@ func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 		return &User{}, err
 	}
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return &User{}, errors.New("user not found")
+		return &User{}, errors.New("User Not Found")
 	}
 	return u, err
 }
